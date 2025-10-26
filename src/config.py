@@ -33,16 +33,26 @@ class Config:
         provider = llm_provider or self.default_llm
         
         if provider == "openrouter":
+            # Format model name with provider prefix for LiteLLM
+            model_name = self.openrouter_model
+            if not model_name.startswith("openrouter/"):
+                model_name = f"openrouter/{model_name}"
+            
             return {
                 "api_key": self.openrouter_api_key,
-                "model": self.openrouter_model,
+                "model": model_name,
                 "base_url": "https://openrouter.ai/api/v1",
                 "provider": "openrouter"
             }
         elif provider == "groq":
+            # Format model name with provider prefix for LiteLLM
+            model_name = self.groq_model
+            if not model_name.startswith("groq/"):
+                model_name = f"groq/{model_name}"
+            
             return {
                 "api_key": self.groq_api_key,
-                "model": self.groq_model,
+                "model": model_name,
                 "base_url": "https://api.groq.com/openai/v1",
                 "provider": "groq"
             }

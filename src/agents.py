@@ -1,8 +1,7 @@
 """
 Agent definitions for the Personalized Education Assistant.
 """
-from crewai import Agent
-from langchain_openai import ChatOpenAI
+from crewai import Agent, LLM
 from src.tools import search_tool, project_tool
 from src.config import config
 
@@ -12,10 +11,11 @@ def create_llm(provider: str = None):
     try:
         llm_config = config.get_llm_config(provider)
         
-        llm = ChatOpenAI(
+        # Use CrewAI's LLM class which handles LiteLLM integration
+        # LiteLLM will automatically route based on provider prefix in model name
+        llm = LLM(
             model=llm_config["model"],
             api_key=llm_config["api_key"],
-            base_url=llm_config["base_url"],
             temperature=0.7
         )
         return llm, llm_config["provider"]
@@ -89,3 +89,4 @@ class EducationAgents:
             verbose=True,
             allow_delegation=False
         )
+        
